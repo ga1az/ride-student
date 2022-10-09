@@ -1,0 +1,13 @@
+.content{
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  text-align: center;
+  height: 100%;
+}
+.item{
+  margin-bottom: 2rem;
+}
+.list{
+  background-color: inherit;
+}
