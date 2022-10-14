@@ -83,33 +83,37 @@ const Login: React.FC<LoginInterface> = () => {
         </IonToolbar>
       </IonHeader>
       <IonContent>
-        <form onSubmit={handleSubmit(onSubmit)} className="content">
-          <IonList className="list">
-            <IonItem className="item">
-              <IonLabel position="floating">Email</IonLabel>
-              <IonInput type="email" {...register("email")} required />
-            </IonItem>
-            <IonItem>
-              {errors.password && (
-                <span style={{ color: "red" }}>Minimo 6 caracteres</span>
-              )}
-              <IonLabel position="floating">password</IonLabel>
-              <IonInput
-                type="password"
-                {...register("password", { minLength: 6 })}
-                required
-              />
-            </IonItem>
-            <a href="">Olvidaste tu contraseña?</a>
-            <IonButton type="submit" expand="block">
-              Ingresar
-            </IonButton>
-            <a href="/register">No tienes una cuenta? registrarse aqui!</a>
-            <IonButton expand="block" fill="clear" onClick={handleRegister}>
-              Iniciar con google
-            </IonButton>
-          </IonList>
-        </form>
+        <div className="contentdiv">
+          <form onSubmit={handleSubmit(onSubmit)}>
+            <IonList className="list">
+              <IonItem className="item">
+                <IonLabel position="floating">Email</IonLabel>
+                <IonInput type="email" {...register("email")} required />
+              </IonItem>
+              <IonItem>
+                {errors.password && (
+                  <span style={{ color: "red" }}>Minimo 6 caracteres</span>
+                )}
+                <IonLabel position="floating">password</IonLabel>
+                <IonInput
+                  type="password"
+                  {...register("password", { minLength: 6 })}
+                  required
+                />
+              </IonItem>
+              <a href="/recuperar">Olvidaste tu contraseña?</a>
+
+              <IonButton type="submit" expand="block">
+                Ingresar
+              </IonButton>
+
+              <a href="/register">No tienes una cuenta? registrarse aqui!</a>
+            </IonList>
+          </form>
+          <IonButton expand="block" onClick={handleRegister}>
+            Iniciar con google
+          </IonButton>
+        </div>
       </IonContent>
     </IonPage>
   );

@@ -22,6 +22,7 @@ import "@ionic/react/css/display.css";
 import "./theme/variables.css";
 import { Home, Login, Register } from "./pages";
 import { useSelector } from "react-redux";
+import { RecuperarContra } from "./pages/RecuperarContra";
 
 setupIonicReact();
 
@@ -38,6 +39,7 @@ const App: React.FC = () => {
           )}
           <Route exact path="/login" component={Login} />
           <Route exact path="/register" component={Register} />
+          <Route exact path="/recuperar" component={RecuperarContra} />
         </IonRouterOutlet>
       </IonReactRouter>
     </IonApp>
