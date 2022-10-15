@@ -69,7 +69,7 @@ const Index: React.FC<IndexInterface> = () => {
             <IonPopover trigger="popover-button" dismissOnSelect={true}>
               <IonContent>
                 <IonList>
-                  <IonItem button={true} detail={false}>
+                  <IonItem button={true} detail={false} href="/perfil">
                     Mi perfil
                   </IonItem>
                   <IonItem button={true} detail={false} onClick={onLogout}>

@@ -3,7 +3,6 @@ import {
   IonContent,
   IonList,
   IonItem,
-  IonText,
   IonAvatar,
   IonHeader,
   IonPopover,
@@ -15,15 +14,17 @@ import {
   IonCardTitle,
 } from "@ionic/react";
 import { query, collection, onSnapshot } from "firebase/firestore";
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import { useDispatch } from "react-redux";
 import { useHistory } from "react-router-dom";
 import { logOutUser } from "../../features/userSlice";
 import { db } from "../../firebase";
+import { ModalInfoViaje } from "../ModalInfoViaje";
 import "./styles/VerViajes.css";
 export interface VerViajesInterface {}
 
 const VerViajes: React.FC<VerViajesInterface> = () => {
+  const [isOpen, setIsOpen] = useState(false);
   const dispatch = useDispatch();
   const history = useHistory();
   const onLogout = () => {
@@ -82,7 +83,7 @@ const VerViajes: React.FC<VerViajesInterface> = () => {
           <h1 style={{ marginLeft: "2rem" }}>Viajes Disponibles</h1>
           <IonList>
             {rides.map((ride: any, index: any) => (
-              <IonItem key={index}>
+              <IonItem key={index} onClick={() => setIsOpen(true)}>
                 <IonCard style={{ width: "100%" }}>
                   <IonCardHeader>
                     <IonCardTitle>Conductor: {ride.displayName}</IonCardTitle>
@@ -100,6 +101,7 @@ const VerViajes: React.FC<VerViajesInterface> = () => {
               </IonItem>
             ))}
           </IonList>
+          <ModalInfoViaje isOpen={isOpen} />
         </IonCard>
       </IonContent>
     </IonPage>

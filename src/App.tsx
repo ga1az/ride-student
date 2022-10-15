@@ -23,6 +23,7 @@ import "./theme/variables.css";
 import { Home, Login, Register } from "./pages";
 import { useSelector } from "react-redux";
 import { RecuperarContra } from "./pages/RecuperarContra";
+import { MiPerfil } from "./components/MiPerfil";
 
 setupIonicReact();
 
@@ -40,6 +41,11 @@ const App: React.FC = () => {
           <Route exact path="/login" component={Login} />
           <Route exact path="/register" component={Register} />
           <Route exact path="/recuperar" component={RecuperarContra} />
+          {user.userUid ? (
+            <Route path="/perfil" component={MiPerfil} />
+          ) : (
+            <Redirect to="/login" />
+          )}
         </IonRouterOutlet>
       </IonReactRouter>
     </IonApp>

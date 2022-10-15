@@ -29,9 +29,16 @@ export const userSlice = createSlice({
       state.userUid = null;
       localStorage.removeItem("usuario");
     },
+    setVehicle: (state, action) => {
+      state.marca = action.payload.marca;
+      state.color = action.payload.color;
+      state.placa = action.payload.placa;
+      state.capacidad = action.payload.capacidad;
+      localStorage.setItem("vehiculo", JSON.stringify(action.payload));
+    },
   },
 });
 
-export const { loginUser, logOutUser } = userSlice.actions;
+export const { loginUser, logOutUser, setVehicle } = userSlice.actions;
 export const selectUser = (state: any) => state.user.user;
 export default userSlice.reducer;
