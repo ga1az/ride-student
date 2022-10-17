@@ -33,7 +33,6 @@ const MiPerfil: React.FC<MiPerfilInterface> = () => {
   const onSubmit = async (data: any) => {
     try {
       await addDoc(collection(db, "vehiculos"), {
-        capacidad: data.capacidad,
         modelo: data.modelo,
         uidConductor: user.userUid,
         color: data.color,
@@ -109,10 +108,6 @@ const MiPerfil: React.FC<MiPerfilInterface> = () => {
               <IonItem>
                 <IonLabel>Placa:</IonLabel>
                 <IonInput required {...register("placa")}></IonInput>
-              </IonItem>
-              <IonItem>
-                <IonLabel>Capacidad:</IonLabel>
-                <IonInput required {...register("capacidad")}></IonInput>
               </IonItem>
               <IonButton type="submit" expand="block">
                 Agregar
