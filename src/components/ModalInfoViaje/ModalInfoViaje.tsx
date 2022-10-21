@@ -7,10 +7,11 @@ import {
   IonToolbar,
   useIonAlert,
 } from "@ionic/react";
-import { updateDoc, doc } from "firebase/firestore";
+import { updateDoc, doc, deleteDoc } from "firebase/firestore";
 import { db } from "../../firebase";
 import "./styles/ModalInfoViaje.css";
 import { useSelector } from "react-redux";
+import { useHistory } from "react-router";
 interface ModalInfoViajeProps {
   isOpen: boolean;
   setIsOpen: (isOpen: boolean) => void;
@@ -18,26 +19,49 @@ interface ModalInfoViajeProps {
 }
 
 const ModalInfoViaje = ({ isOpen, setIsOpen, rides }: ModalInfoViajeProps) => {
+  const history = useHistory();
   const [presentAlert] = useIonAlert();
 
   const user = useSelector((state: any) => state.user);
 
   async function updateViaje() {
-    const data = {
-      cupos: rides.cupos - 1,
-      pasajeros: [...rides.pasajeros, user.userUid],
-    };
-    try {
-      await updateDoc(doc(db, "viajes", rides.id), data);
-      presentAlert({
-        message: "Viaje reservado con exito",
-        buttons: ["OK"],
-      });
-    } catch (error) {
+    if (rides.cupos > 0) {
+      if (!rides.pasajeros.includes(user.userUid)) {
+        const data = {
+          cupos: rides.cupos - 1,
+          pasajeros: [...rides.pasajeros, user.userUid],
+        };
+        try {
+          await updateDoc(doc(db, "viajes", rides.id), data);
+          presentAlert({
+            message: "Viaje reservado con exito",
+            buttons: ["OK"],
+          });
+        } catch (error) {
+          presentAlert({
+            message: "Viaje no reservado",
+            buttons: ["OK"],
+          });
+        }
+        setIsOpen(false);
+        return history.push("/");
+      } else {
+        presentAlert({
+          message: "No puedes reservar un viaje que ya reservaste",
+          buttons: ["OK"],
+        });
+      }
+    } else {
       presentAlert({
         message: "Viaje no reservado",
         buttons: ["OK"],
       });
+      const data = {
+        estado: false,
+      };
+      await updateDoc(doc(db, "viajes", rides.id), data);
+      setIsOpen(false);
+      return history.push("/");
     }
   }
   return (
@@ -55,7 +79,6 @@ const ModalInfoViaje = ({ isOpen, setIsOpen, rides }: ModalInfoViajeProps) => {
         <p>Descripcion: {rides.desc}</p>
         <p>Hora de salida: {rides.horasalida}</p>
         <p>Precio: {rides.precio}</p>
-        <p>Pasajeros: {rides.pasajeros}</p>
         <p>Cupos disponibles: {rides.cupos}</p>
 
         <IonButton expand="full" onClick={updateViaje}>

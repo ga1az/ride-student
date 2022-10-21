@@ -6,7 +6,8 @@ export interface viajes {
   destino: String;
   descripcion: String;
   precio: number;
-  asientos: number;
+  cupos: number;
   pasajeros: String[];
   id: String;
+  estado: boolean;
 }

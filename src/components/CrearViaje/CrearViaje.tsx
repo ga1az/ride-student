@@ -54,10 +54,11 @@ const CrearViaje: React.FC<CrearViajeInterface> = () => {
       fecha: new Date(),
       destino: direccion.value,
       precio: data.precio,
-      cupos: data.cupo,
+      cupos: parseInt(data.cupo),
       descripcion: data.descripcion,
       horasalida: data.horasalida,
       pasajeros: [],
+      estado: true,
     });
     presentAlert({
       message: "Viaje Creado",

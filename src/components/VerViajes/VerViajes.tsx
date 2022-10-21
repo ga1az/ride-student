@@ -15,15 +15,16 @@ import {
 } from "@ionic/react";
 import { query, collection, onSnapshot } from "firebase/firestore";
 import React, { useEffect, useRef, useState } from "react";
-import { useDispatch } from "react-redux";
-import { useHistory } from "react-router-dom";
+import { useDispatch, useSelector } from "react-redux";
 import { logOutUser } from "../../features/userSlice";
 import { db } from "../../firebase";
+import { viajes } from "../../types";
 import { ModalInfoViaje } from "../ModalInfoViaje";
 import "./styles/VerViajes.css";
 export interface VerViajesInterface {}
 
 const VerViajes: React.FC<VerViajesInterface> = () => {
+  const user = useSelector((state: any) => state.user);
   const [isOpen, setIsOpen] = useState(false);
   const [idItem, setIdItem] = useState({});
   const dispatch = useDispatch();
@@ -43,6 +44,14 @@ const VerViajes: React.FC<VerViajesInterface> = () => {
     });
     return unsubscribe;
   }, []);
+
+  const viajeTrue = rides.filter((ride: viajes) => ride.estado === true);
+  const tusviajes = viajeTrue.filter(
+    (ride: viajes) =>
+      ride.uid !== user.userUid &&
+      ride.cupos > 0 &&
+      ride.pasajeros.includes(user.userUid) === false
+  );
 
   function onClickItem(id: any) {
     setIsOpen(true);
@@ -96,7 +105,7 @@ const VerViajes: React.FC<VerViajesInterface> = () => {
         <IonCard>
           <h1 style={{ marginLeft: "2rem" }}>Viajes Disponibles</h1>
           <IonList>
-            {rides.map((ride: any, index: any) => (
+            {tusviajes.map((ride: any, index: any) => (
               <IonItem key={index} onClick={() => onClickItem(ride)}>
                 <IonCard style={{ width: "100%" }}>
                   <IonCardHeader>

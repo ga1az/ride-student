@@ -63,11 +63,11 @@ const Index: React.FC<IndexInterface> = () => {
   async function onDelete(ride: any) {
     presentAlert({
       header: "Eliminar viaje",
-      message: "¿Estás seguro de eliminar este viaje?",
+      message: "Solo debes eliminar el viaje cuando termines tu recorrido",
       buttons: [
         "Cancelar",
         {
-          text: "Eliminar",
+          text: "Confirmar",
           handler: async () => {
             await deleteDoc(doc(db, "viajes", ride));
           },
@@ -126,6 +126,7 @@ const Index: React.FC<IndexInterface> = () => {
                     <p>Destino: {ride.destino}</p>
                     <p>Descripcion: {ride.descripcion}</p>
                     <p>Hora salida: {ride.horasalida}</p>
+                    <p>Puestos: {ride.cupos}</p>
                   </IonCardContent>
                 </IonCard>
               </IonItem>
@@ -139,6 +140,9 @@ const Index: React.FC<IndexInterface> = () => {
               <IonItem key={index}>
                 <IonCard style={{ width: "100%" }}>
                   <IonCardHeader>
+                    {ride.estado === false ? (
+                      <IonCardTitle>LLENO</IonCardTitle>
+                    ) : null}
                     <IonCardTitle>{ride.displayName}</IonCardTitle>
                     <IonCardSubtitle>{ride.precio}</IonCardSubtitle>
                   </IonCardHeader>
@@ -152,6 +156,7 @@ const Index: React.FC<IndexInterface> = () => {
                       <div>
                         <p>{ride.destino}</p>
                         <p>{ride.descripcion}</p>
+                        <p>Cupos: {ride.cupos}</p>
                       </div>
                       <IonButton
                         fill="outline"
