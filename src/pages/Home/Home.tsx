@@ -11,11 +11,11 @@ import { IonReactRouter } from "@ionic/react-router";
 import { Route, Redirect } from "react-router";
 import { CrearViaje } from "../../components/CrearViaje";
 import { carOutline, homeOutline, pushOutline } from "ionicons/icons";
-import { Index } from "../../components/Index";
 import { VerViajes } from "../../components/VerViajes";
 import "./Home.css";
 import { useSelector } from "react-redux";
 import { Login } from "../Login";
+import Index from "../../components/Index/Index";
 
 const Home: React.FC = () => {
   const user = useSelector((state: any) => state.user);

@@ -25,11 +25,11 @@ export interface VerViajesInterface {}
 
 const VerViajes: React.FC<VerViajesInterface> = () => {
   const [isOpen, setIsOpen] = useState(false);
+  const [idItem, setIdItem] = useState({});
   const dispatch = useDispatch();
-  const history = useHistory();
   const onLogout = () => {
     dispatch(logOutUser());
-    return history.push("/login");
+    return window.location.replace("/login");
   };
   const [rides, setRides] = useState([]);
   useEffect(() => {
@@ -43,13 +43,27 @@ const VerViajes: React.FC<VerViajesInterface> = () => {
     });
     return unsubscribe;
   }, []);
+
+  function onClickItem(id: any) {
+    setIsOpen(true);
+    setIdItem({
+      displayName: id.displayName,
+      id: id.id,
+      precio: id.precio,
+      destino: id.destino,
+      desc: id.descripcion,
+      horasalida: id.horasalida,
+      pasajeros: id.pasajeros,
+      cupos: id.cupos,
+    });
+  }
   return (
     <IonPage>
       <IonHeader>
         <IonToolbar style={{ padding: "0.2rem" }}>
           <>
             <IonAvatar
-              id="popover-button"
+              id="popover-buttona"
               slot="end"
               style={{
                 width: "40px",
@@ -63,14 +77,14 @@ const VerViajes: React.FC<VerViajesInterface> = () => {
                 src="https://ionicframework.com/docs/img/demos/avatar.svg"
               />
             </IonAvatar>
-            <IonPopover trigger="popover-button" dismissOnSelect={true}>
+            <IonPopover trigger="popover-buttona" dismissOnSelect={true}>
               <IonContent>
                 <IonList>
-                  <IonItem button={true} detail={false}>
-                    Option 1
+                  <IonItem button={true} detail={false} href="/perfil">
+                    Mi perfil
                   </IonItem>
-                  <IonItem button={true} detail={false}>
-                    Option 2
+                  <IonItem button={true} detail={false} onClick={onLogout}>
+                    Cerrar sesión
                   </IonItem>
                 </IonList>
               </IonContent>
@@ -83,7 +97,7 @@ const VerViajes: React.FC<VerViajesInterface> = () => {
           <h1 style={{ marginLeft: "2rem" }}>Viajes Disponibles</h1>
           <IonList>
             {rides.map((ride: any, index: any) => (
-              <IonItem key={index} onClick={() => setIsOpen(true)}>
+              <IonItem key={index} onClick={() => onClickItem(ride)}>
                 <IonCard style={{ width: "100%" }}>
                   <IonCardHeader>
                     <IonCardTitle>Conductor: {ride.displayName}</IonCardTitle>
@@ -100,8 +114,12 @@ const VerViajes: React.FC<VerViajesInterface> = () => {
                 </IonCard>
               </IonItem>
             ))}
+            <ModalInfoViaje
+              isOpen={isOpen}
+              setIsOpen={setIsOpen}
+              rides={idItem}
+            />
           </IonList>
-          <ModalInfoViaje isOpen={isOpen} />
         </IonCard>
       </IonContent>
     </IonPage>

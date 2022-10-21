@@ -13,14 +13,19 @@ import {
   IonPopover,
   IonToolbar,
 } from "@ionic/react";
-import { addDoc, collection } from "firebase/firestore";
-import React from "react";
+import {
+  addDoc,
+  collection,
+  onSnapshot,
+  query,
+  where,
+} from "firebase/firestore";
+import React, { useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
 import { useDispatch, useSelector } from "react-redux";
 import { useHistory } from "react-router";
 import { logOutUser } from "../../features/userSlice";
 import { db } from "../../firebase";
-import { Header } from "../Header";
 import Destinoinput from "./inputDestino";
 import "./styles/CrearViaje.css";
 export interface CrearViajeInterface {}
@@ -32,7 +37,7 @@ const CrearViaje: React.FC<CrearViajeInterface> = () => {
   const dispatch = useDispatch();
   const onLogout = () => {
     dispatch(logOutUser());
-    return history.push("/login");
+    return window.location.replace("/login");
   };
 
   const {
@@ -61,13 +66,34 @@ const CrearViaje: React.FC<CrearViajeInterface> = () => {
     reset();
     return history.push("/");
   };
+
+  const [vehicle, setVehicle]: any = useState("");
+  useEffect(() => {
+    const unsubscribe = onSnapshot(
+      query(
+        collection(db, "vehiculos"),
+        where("uidConductor", "==", user.userUid)
+      ),
+      (querySnapshot) => {
+        let rides: any = {};
+        querySnapshot.forEach((doc) => {
+          rides = { ...doc.data(), id: doc.id };
+        });
+        setVehicle(rides);
+      }
+    );
+    return unsubscribe;
+  }, []);
+
+  const isEmpty = Object.keys(vehicle).length === 0;
+
   return (
     <IonPage>
       <IonHeader>
         <IonToolbar style={{ padding: "0.2rem" }}>
           <>
             <IonAvatar
-              id="popover-button"
+              id="popover-buttone"
               slot="end"
               style={{
                 width: "40px",
@@ -81,14 +107,14 @@ const CrearViaje: React.FC<CrearViajeInterface> = () => {
                 src="https://ionicframework.com/docs/img/demos/avatar.svg"
               />
             </IonAvatar>
-            <IonPopover trigger="popover-button" dismissOnSelect={true}>
+            <IonPopover trigger="popover-buttone" dismissOnSelect={true}>
               <IonContent>
                 <IonList>
-                  <IonItem button={true} detail={false}>
-                    Option 1
+                  <IonItem button={true} detail={false} href="/perfil">
+                    Mi perfil
                   </IonItem>
-                  <IonItem button={true} detail={false}>
-                    Option 2
+                  <IonItem button={true} detail={false} onClick={onLogout}>
+                    Cerrar sesión
                   </IonItem>
                 </IonList>
               </IonContent>
@@ -142,11 +168,19 @@ const CrearViaje: React.FC<CrearViajeInterface> = () => {
             </IonItem>
             <IonItem>
               <IonLabel position="floating">Precio</IonLabel>
-              <IonInput type="number" required {...register("precio")} />
+              <IonInput
+                type="number"
+                required
+                {...register("precio", { pattern: /^[1-9][0-9]*$/ })}
+              />
             </IonItem>
             <IonItem>
               <IonLabel position="floating">Cantidad de pasajeros</IonLabel>
-              <IonInput type="number" required {...register("cupo")} />
+              <IonInput
+                type="number"
+                required
+                {...register("cupo", { pattern: /^[1-9][0-9]*$/ })}
+              />
             </IonItem>
             <IonItem>
               <IonLabel position="floating">Descripcion</IonLabel>
@@ -158,9 +192,16 @@ const CrearViaje: React.FC<CrearViajeInterface> = () => {
               />
             </IonItem>
 
-            <IonButton expand="block" type="submit">
+            <IonButton
+              expand="block"
+              type="submit"
+              disabled={isEmpty ? true : false}
+            >
               Crear Viaje
             </IonButton>
+            {isEmpty ? (
+              <IonText color="danger">No tienes un vehiculo registrado</IonText>
+            ) : null}
           </form>
         </div>
       </IonContent>

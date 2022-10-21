@@ -7,22 +7,25 @@ import {
   IonLabel,
   IonList,
   IonPage,
-  IonTitle,
   IonToolbar,
   useIonAlert,
 } from "@ionic/react";
-import React from "react";
-import { useDispatch, useSelector } from "react-redux";
+import React, { useEffect, useState } from "react";
+import { useSelector } from "react-redux";
 import "./styles/MiPerfil.css";
-import { updateProfile } from "firebase/auth";
-import { auth, db } from "../../firebase";
-import { addDoc, collection } from "firebase/firestore";
+import { db } from "../../firebase";
+import {
+  addDoc,
+  collection,
+  onSnapshot,
+  query,
+  where,
+} from "firebase/firestore";
 import { useForm } from "react-hook-form";
 export interface MiPerfilInterface {}
 
 const MiPerfil: React.FC<MiPerfilInterface> = () => {
   const [presentAlert] = useIonAlert();
-  const dispatch = useDispatch();
   const {
     register,
     handleSubmit,
@@ -50,6 +53,24 @@ const MiPerfil: React.FC<MiPerfilInterface> = () => {
       });
     }
   };
+
+  const [vehicle, setVehicle]: any = useState();
+  useEffect(() => {
+    const unsubscribe = onSnapshot(
+      query(
+        collection(db, "vehiculos"),
+        where("uidConductor", "==", user.userUid)
+      ),
+      (querySnapshot) => {
+        let rides: any = {};
+        querySnapshot.forEach((doc) => {
+          rides = { ...doc.data(), id: doc.id };
+        });
+        setVehicle(rides);
+      }
+    );
+    return unsubscribe;
+  }, []);
 
   return (
     <IonPage>
@@ -99,17 +120,36 @@ const MiPerfil: React.FC<MiPerfilInterface> = () => {
             <IonList>
               <IonItem>
                 <IonLabel>Modelo:</IonLabel>
-                <IonInput required {...register("modelo")}></IonInput>
+                <IonInput
+                  required
+                  {...register("modelo")}
+                  value={vehicle ? vehicle.modelo : ""}
+                  disabled={vehicle?.modelo ? true : false}
+                ></IonInput>
               </IonItem>
               <IonItem>
                 <IonLabel>Color:</IonLabel>
-                <IonInput required {...register("color")}></IonInput>
+                <IonInput
+                  required
+                  {...register("color")}
+                  value={vehicle ? vehicle.color : ""}
+                  disabled={vehicle?.modelo ? true : false}
+                ></IonInput>
               </IonItem>
               <IonItem>
                 <IonLabel>Placa:</IonLabel>
-                <IonInput required {...register("placa")}></IonInput>
+                <IonInput
+                  required
+                  {...register("placa")}
+                  value={vehicle ? vehicle.placa : ""}
+                  disabled={vehicle?.modelo ? true : false}
+                ></IonInput>
               </IonItem>
-              <IonButton type="submit" expand="block">
+              <IonButton
+                type="submit"
+                expand="block"
+                disabled={vehicle?.modelo ? true : false}
+              >
                 Agregar
               </IonButton>
             </IonList>
