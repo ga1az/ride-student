@@ -5,6 +5,10 @@ import * as serviceWorkerRegistration from "./serviceWorkerRegistration";
 import reportWebVitals from "./reportWebVitals";
 import { Provider } from "react-redux";
 import store from "./app/store";
+import mapboxgl from "mapbox-gl";
+
+mapboxgl.accessToken =
+  "pk.eyJ1IjoiZ2ExYXoiLCJhIjoiY2w5Mnpoc21yMW9sZzNwdDVlanZ5cmxjbyJ9.JGwVwyGlJfKfBGsAZgkeKg";
 
 const container = document.getElementById("root");
 const root = createRoot(container!);

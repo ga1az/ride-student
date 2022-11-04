@@ -12,6 +12,7 @@ import { db } from "../../firebase";
 import "./styles/ModalInfoViaje.css";
 import { useSelector } from "react-redux";
 import { useHistory } from "react-router";
+import { MapView } from "../MapView";
 interface ModalInfoViajeProps {
   isOpen: boolean;
   setIsOpen: (isOpen: boolean) => void;
@@ -74,6 +75,9 @@ const ModalInfoViaje = ({ isOpen, setIsOpen, rides }: ModalInfoViajeProps) => {
         </IonToolbar>
       </IonHeader>
       <IonContent className="ion-padding">
+        <div style={{ padding: "1rem" }}>
+          <MapView ride={rides} />
+        </div>
         <p>Conductor: {rides.displayName}</p>
         <p>Destino: {rides.destino}</p>
         <p>Descripcion: {rides.desc}</p>
