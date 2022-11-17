@@ -102,6 +102,8 @@ const MiPerfil: React.FC<MiPerfilInterface> = () => {
             flexDirection: "column",
             justifyContent: "center",
             textAlign: "center",
+            padding: "1rem",
+            gap: "1rem",
           }}
         >
           <h1>Mi Perfil</h1>
@@ -114,10 +116,25 @@ const MiPerfil: React.FC<MiPerfilInterface> = () => {
             <IonInput value={user.userEmail} disabled></IonInput>
           </IonItem>
         </div>
-        <div>
+        <div
+          style={{
+            display: "flex",
+            flexDirection: "column",
+            justifyContent: "center",
+            textAlign: "center",
+            padding: "1rem",
+            gap: "1rem",
+          }}
+        >
           <h1>Agregar Vehiculo</h1>
           <form onSubmit={handleSubmit(onSubmit)}>
-            <IonList>
+            <div
+              style={{
+                display: "flex",
+                flexDirection: "column",
+                gap: "1px",
+              }}
+            >
               <IonItem>
                 <IonLabel>Modelo:</IonLabel>
                 <IonInput
@@ -152,7 +169,7 @@ const MiPerfil: React.FC<MiPerfilInterface> = () => {
               >
                 Agregar
               </IonButton>
-            </IonList>
+            </div>
           </form>
         </div>
       </IonContent>
